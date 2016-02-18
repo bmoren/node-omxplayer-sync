@@ -1,0 +1,23 @@
+{
+  "name": "node-omxplayer-sync",
+  "version": "1.0.0",
+  "description": "sync omxplayer with nodejs",
+  "main": "omx-sync.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bmoren/node-omxplayer-sync.git"
+  },
+  "author": "bmoren",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bmoren/node-omxplayer-sync/issues"
+  },
+  "homepage": "https://github.com/bmoren/node-omxplayer-sync#readme",
+  "dependencies": {
+    "socket.io": "^1.4.5",
+    "dbus-native":"^0.2.0"
+  }
+}
