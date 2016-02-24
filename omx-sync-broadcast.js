@@ -6,12 +6,13 @@ var exec = require('child_process').exec;
 var file = process.argv.slice(2)[0]; //get a path to the video argument
 var options = process.argv.slice(2)[1];
 var currentPosition;
+var bus;
 
 server.listen(3000, function() { console.log( 'Listening on port 3000') });
 
 // PARSE TERMINAL INPUT.
 if(options == undefined){
-  options = '-o hdmi --loop -b';
+  options = '-o hdmi --loop -b'; // --no-osd
 }
 if(file == undefined){
   console.log("no video file specified");
@@ -22,34 +23,34 @@ console.log('current video path: ' + file);
 //start omx player
 var omx = exec('omxplayer '+options+' "'+file+'"');
 
-//SOCKET>IO HANDLING
+//SOCKET.IO HANDLING
 
 io.on('connection', function(socket){
   console.log("user connected: " + socket.id);
 });
 
 //DBUS HANDLING
-var bus = dbus.sessionBus({
-        busAddress: fs.readFileSync('/tmp/omxplayerdbus.pi', 'ascii').trim()
-});
-
-// get current position to broadcast out to the listeners
-setInterval(function(){
-  bus.invoke({
-          path: "/org/mpris/MediaPlayer2",
-          interface: "org.freedesktop.DBus.Properties",
-          member: "Position",
-          destination: "org.mpris.MediaPlayer2.omxplayer",
-  }, function(err, position) {
-          // console.log(err, position);
-          currentPosition = position; //set to a global
-          // console.log('position: '+ currentPosition / 1000000 + ' seconds');
-
+setTimeout(function(){
+  bus = dbus.sessionBus({
+          busAddress: fs.readFileSync('/tmp/omxplayerdbus.pi', 'ascii').trim()
   });
 
-  io.emit('broadcastPosition', { position: currentPosition }); //send the position of the broadcaster to all of the listeners
+  // get current position to broadcast out to the listeners
+  setInterval(function(){
+    bus.invoke({
+            path: "/org/mpris/MediaPlayer2",
+            interface: "org.freedesktop.DBus.Properties",
+            member: "Position",
+            destination: "org.mpris.MediaPlayer2.omxplayer",
+    }, function(err, position) {
+            currentPosition = position; //set to a global
+    });
 
-},100);
+    io.emit('broadcastPosition', { position: currentPosition }); //send the position of the broadcaster to all of the listeners
+
+  },100);
+
+}, 500)
 
 
 
