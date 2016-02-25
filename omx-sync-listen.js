@@ -6,6 +6,7 @@ var file = process.argv.slice(2)[0]; //get a path to the video argument
 var options = process.argv.slice(2)[1];
 var bus;
 var currentPosition;
+var gate = true;
 
 // PARSE TERMINAL INPUT.
 if(options == undefined){
@@ -26,19 +27,13 @@ socket.on('connect', function(){
 });
 
 //DBUS HANDLING
-setTimeout(function(){
+setTimeout(function(){ //wait for dbus to become available.
   bus = dbus.sessionBus({
           busAddress: fs.readFileSync('/tmp/omxplayerdbus.pi', 'ascii').trim()
   });
 
-
-  socket.on('broadcastPosition', function(broadcastPos){
-    console.log("socketData: " + broadcastPos.position);
-    currentPosition = broadcastPos.position;
-  });
-
   socket.on('loopFlag', function(loopFlag){
-    console.log("looped, go to start");
+    console.log("Broadcaster looped, go to start");
     seek(0);
   })
 
@@ -47,7 +42,6 @@ setTimeout(function(){
 
 // SEEK a specific position.
 function seek(pos){
-
   bus.invoke({
           path: "/org/mpris/MediaPlayer2",
           interface: "org.mpris.MediaPlayer2.Player",
@@ -56,7 +50,9 @@ function seek(pos){
           signature: "ox",
           body: [ '/not/used', pos ]
   }, function(err) {
-          // console.log(err);
+    if(err != null){
+          console.log(err);
+        }
   });
 
 }

@@ -35,7 +35,7 @@ socket.on('loopFlag', function(loopFlag){
 })
 
 //DBUS HANDLING
-setTimeout(function(){
+setTimeout(function(){ //wait for dbus to become available.
   bus = dbus.sessionBus({
           busAddress: fs.readFileSync('/tmp/omxplayerdbus.pi', 'ascii').trim()
   });
@@ -59,14 +59,12 @@ setTimeout(function(){
             member: "Position",
             destination: "org.mpris.MediaPlayer2.omxplayer",
     }, function(err, position) {
-      if( position < 18446744073709392000){
             currentPosition = position; //set to a global
             console.log("CP: " + currentPosition);
-      }
     });
 
-    if(currentPosition >= totalDuration - 200000 && currentPosition < totalDuration){
-      console.log("******************Ended");
+    if(currentPosition >= totalDuration - 250000 && currentPosition < totalDuration){ //are we in the end range of the file?
+      console.log("Ended ******************");
       io.emit('loopFlag', { loopFlag : 'loop' });
     }
 
@@ -86,7 +84,9 @@ function seek(pos){
           signature: "ox",
           body: [ '/not/used', pos ]
   }, function(err) {
-          console.log(err);
+    if(err != null){
+          console.log("ERROR: "+err);
+        }
   });
 
 }
