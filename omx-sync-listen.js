@@ -5,11 +5,11 @@ var exec = require('child_process').exec;
 var file = process.argv.slice(2)[0]; //get a path to the video argument
 var options = process.argv.slice(2)[1];
 var bus;
-var sync = false;
+var currentPosition;
 
 // PARSE TERMINAL INPUT.
 if(options == undefined){
-  options = '-o hdmi --loop -b';
+  options = '-o hdmi --loop -b --no-osd';
 }
 if(file == undefined){
   console.log("no video file specified");
@@ -20,6 +20,11 @@ console.log('current video path: ' + file);
 //start omx player
 var omx = exec('omxplayer '+options+' "'+file+'"');
 
+//SOCKET.IO HANDLING
+socket.on('connect', function(){
+  console.log("I am connected as: " + socket.id);
+});
+
 //DBUS HANDLING
 setTimeout(function(){
   bus = dbus.sessionBus({
@@ -27,19 +32,16 @@ setTimeout(function(){
   });
 
 
-  //SOCKET.IO HANDLING
-  socket.on('connect', function(){
-    console.log("I am connected as: " + socket.id);
-  });
-
   socket.on('broadcastPosition', function(broadcastPos){
     console.log("socketData: " + broadcastPos.position);
-    // currentPosition = broadcastPos.position;
-    if( sync == false){
-      seek(broadcastPos.position);
-      sync = true;
-    }
+    currentPosition = broadcastPos.position;
   });
+
+  socket.on('loopFlag', function(loopFlag){
+    console.log("looped, go to start");
+    seek(0);
+  })
+
 }, 500)
 
 
@@ -54,7 +56,7 @@ function seek(pos){
           signature: "ox",
           body: [ '/not/used', pos ]
   }, function(err) {
-          console.log(err);
+          // console.log(err);
   });
 
 }
