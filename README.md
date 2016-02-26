@@ -1,4 +1,5 @@
 # node-omxplayer-sync
+🖥〰️〰️🖥〰️〰️🖥〰️〰️🖥〰️〰️🖥〰️〰️🖥〰️〰️🖥
 ## synchronized looping video for raspberry pi &amp; omxplayer!
 
 node omx-sync-broadcast.js path/to/video.mp4  
