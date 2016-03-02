@@ -51,7 +51,7 @@ setTimeout(function(){ //wait for dbus to become available.
   });
 
 
-  // get current position to broadcast out to the listeners
+  //send out loop flag
   setInterval(function(){
     bus.invoke({
             path: "/org/mpris/MediaPlayer2",
@@ -68,11 +68,9 @@ setTimeout(function(){ //wait for dbus to become available.
       io.emit('loopFlag', { loopFlag : 'loop' });
     }
 
-    // io.emit('broadcastPosition', { position: currentPosition }); //send the position of the broadcaster to all of the listeners
-
   },100);
 
-}, 500)
+}, 500);
 
 
 function seek(pos){

@@ -39,7 +39,6 @@ setTimeout(function(){ //wait for dbus to become available.
 
 }, 500)
 
-
 // SEEK a specific position.
 function seek(pos){
   bus.invoke({

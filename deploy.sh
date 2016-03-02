@@ -1,16 +1,22 @@
 #!/bin/bash
+#To deploy from development machine to test pis
+# you will need to npm install on each machine after rsyncing
 
-ssh_alias="pi@192.168.0.25"
-ssh_alias2="pi@192.168.0.24"
+#add as many pi's as you want to the arrray of pi's here:
+ssh_alias=( "pi@192.168.0.25" "pi@192.168.0.24" "pi@192.168.0.33" )
+
 site_folder="./*"
 remote_folder="~/node-omxplayer-sync"
 exclude="node_modules"
 
-rsync --exclude ${exclude} -a ${site_folder} ${ssh_alias}:${remote_folder} -v
-rsync --exclude ${exclude} -a ${site_folder} ${ssh_alias2}:${remote_folder} -v
+for i in "${ssh_alias[@]}"
+do
+	rsync --exclude ${exclude} -a ${site_folder} ${i}:${remote_folder} -v
+done
+
+# rsync --exclude ${exclude} -a ${site_folder} ${ssh_alias2}:${remote_folder} -v
 
 
 #try to fix this....
 # ssh -t ${ssh_alias} "cd $remote_folder && npm install"
-
 # ssh ${ssh_alias} 'bash -l -c "source /home/pi/.bashrc; cd $remote_folder; npm install"'
