@@ -2,24 +2,28 @@
 
 ## synchronized looping video for raspberry pi &amp; omxplayer!
 
-to install for deployment:
+node-omxplayer-sync utilizes a socket.io connection between and broadcaster and many listener raspberry pis provided to synchronized playback. The broadcaster sends out a notification to all listeners when its video has looped. This resets all listeners (including itself) to the start of the loop playback. All listeners synchronize on one full playback loop of the main broadcaster and will continually attempt to re-sync each time the main broadcaster's file loops.
 
-- `git clone` this repository to ~/ on your raspberry pi
+### to install for deployment:
+
+- `git clone` this repository to `~/` on your raspberry pi
+- `cd ~/node-omxplayer-sync`
 - `chmod +x install.sh`
-- configure the IP's of all raspberry pis, dive into the .js files and adjust the socket.io IP assignments.
-
-  - at the moment you must manually point to the IP address of the broadcaster from the omx-sync-listen.js, It's a good idea to give at least your broadcaster a [Static IP](https://pihw.wordpress.com/guides/direct-network-connection/in-a-nut-shell-direct-network-connection/) so that this never changes. Its on the roadmap to make this a smoother/simpler process, if you have ideas, drop a line in the issues tab with a suggestion, Ideally this would be able to scan for the broadcaster and connect to it.
-
-- `node omx-sync-broadcast.js path/to/video.mp4` on the main broadcast pi  
-- `node omx-sync-listen.js path/to/video.mp4` on all other pis
+- `./install.sh`
+- configure the ip address of one of the raspberry pis to act as the main broadcaster with a [Static IP](https://pihw.wordpress.com/guides/direct-network-connection/in-a-nut-shell-direct-network-connection/) of `192.168.0.99`, or dive into the omx-sync.js file and adjust the socket.io IP assignment manually to whatever you like.
+- `node omx-sync.js path/to/video.mp4` on each pi
 
 --------------------------------------------------------------------------------
+
+### auto-run on startup
+
+coming soon!
 
 ### Tested on
 
 Node V 5.6.0
 
-omxplayer<br>Build date: Sat, 02 Jan 2016 13:46:33 +0000<br>Version   : f544084 [master]
+omxplayer<br>Version   : f544084 [master]
 
 RASPBIAN JESSIE LITE<br>Release date:2016-02-09<br>Kernel version:4.1
 

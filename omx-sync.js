@@ -1,13 +1,13 @@
 var fs = require('fs');
 var server = require('http').createServer();
-var socket = require('socket.io-client')('http://192.168.0.24:3000');
+var socket = require('socket.io-client')('http://192.168.0.99:3000');
 var io = require('socket.io')(server);
 var dbus = require('dbus-native');
 var exec = require('child_process').exec;
 var file = process.argv.slice(2)[0]; //get a path to the video argument
 var options = process.argv.slice(2)[1];
 var currentPosition, totalDuration;
-var bus;
+var bus; //main DBUS
 
 server.listen(3000, function() { console.log( 'Listening on port 3000') });
 
@@ -26,20 +26,24 @@ var omx = exec('omxplayer '+options+' "'+file+'"');
 
 //SOCKET.IO HANDLING
 io.on('connection', function(socket){
-  console.log("user connected: " + socket.id);
+  console.log("Listener connected: " + socket.id);
+});
+
+socket.on('connect', function(){
+  console.log("Connected to the broadcaster as: " + socket.id);
 });
 
 socket.on('loopFlag', function(loopFlag){
-  console.log("looped");
+  console.log("loop flag recieved, go to 0");
   seek(0);
 })
 
 //DBUS HANDLING
-setTimeout(function(){ //wait for dbus to become available.
   bus = dbus.sessionBus({
           busAddress: fs.readFileSync('/tmp/omxplayerdbus.pi', 'ascii').trim()
   });
 
+setTimeout(function(){ //wait for dbus to become available.
   bus.invoke({
           path: "/org/mpris/MediaPlayer2",
           interface: "org.freedesktop.DBus.Properties",
@@ -60,17 +64,17 @@ setTimeout(function(){ //wait for dbus to become available.
             destination: "org.mpris.MediaPlayer2.omxplayer",
     }, function(err, position) {
             currentPosition = position; //set to a global
-            console.log("CP: " + currentPosition);
+            // console.log("CP: " + currentPosition);
     });
 
     if(currentPosition >= totalDuration - 250000 && currentPosition < totalDuration){ //are we in the end range of the file?
-      console.log("Ended ******************");
+      console.log("*File Ended");
       io.emit('loopFlag', { loopFlag : 'loop' });
     }
 
   },100);
 
-}, 500);
+}, 1000);
 
 
 function seek(pos){

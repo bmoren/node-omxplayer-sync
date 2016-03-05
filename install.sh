@@ -27,3 +27,6 @@ sudo --yes --force-yes apt-get install omxplayer
 #get your pi up to date!
 sudo apt-get update
 sudo apt-get upgrade
+
+#dont forget to expand your filesystem using:
+#sudo raspi-config
