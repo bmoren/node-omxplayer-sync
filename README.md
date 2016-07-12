@@ -18,13 +18,16 @@ Currently the installer script does not work, if you want to make one, please ma
   1. ` sudo apt-get install rsync`
 1. install nvm & node.js latest
  1. `wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.31.2/install.sh | bash`
- 1. `nvm install stable`
  1. `source ~/.bashrc`
+ 1. `nvm install stable`
 1. update & install npm packages
   1. `cd ~/node-omxplayer-sync`
   1. `npm install`
 1. configure the ip address of one of the raspberry pis to act as the main broadcaster with a [Static IP](https://pihw.wordpress.com/guides/direct-network-connection/in-a-nut-shell-direct-network-connection/) of `192.168.0.99`, or dive into the omx-sync.js file and adjust the socket.io IP assignment manually to whatever you like.
 1. `node omx-sync.js path/to/video.mp4` on each pi to run the sync video!
+
+#### Notes:  
+You might encounter the error `no such file or directory, open '/tmp/omxplayerdbus.pi'` on the first attempt on running the script, just try again.
 
 --------------------------------------------------------------------------------
 
@@ -34,10 +37,10 @@ coming soon!
 
 ### Tested on
 
-Node V 5.6.0
+Node v6.3.0
 
-omxplayer<br>Version   : f544084 [master]
+omxplayer<br>Version: 6c90c75 [master]
 
-RASPBIAN JESSIE LITE<br>Release date:2016-02-09<br>Kernel version:4.1
+RASPBIAN JESSIE LITE<br>Release date:2016-05-27
 
-dbus-native@0.2.0<br>socket.io@1.4.5
+dbus-native@0.2.0<br>socket.io@1.4.8
