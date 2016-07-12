@@ -6,12 +6,25 @@ node-omxplayer-sync utilizes a socket.io connection between and broadcaster and 
 
 ### to install for deployment:
 
-- `git clone` this repository to `~/` on your raspberry pi
-- `cd ~/node-omxplayer-sync`
-- `chmod +x install.sh`
-- `./install.sh`
-- configure the ip address of one of the raspberry pis to act as the main broadcaster with a [Static IP](https://pihw.wordpress.com/guides/direct-network-connection/in-a-nut-shell-direct-network-connection/) of `192.168.0.99`, or dive into the omx-sync.js file and adjust the socket.io IP assignment manually to whatever you like.
-- `node omx-sync.js path/to/video.mp4` on each pi
+Currently the installer script does not work, if you want to make one, please make a pull request! Verbose directions below!
+
+1. Setup your Pi
+  1. Expand your filesystem: `sudo raspi-config`
+  1. `sudo apt-get update`
+  1. `sudo apt-get upgrade`
+1. `git clone` this repository to `~/` on your raspberry pi
+1. if you are running raspbian jessie, install omxplayer & rsync
+  1. `sudo apt-get install omxplayer`
+  1. ` sudo apt-get install rsync`
+1. install nvm & node.js latest
+ 1. `wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.31.2/install.sh | bash`
+ 1. `nvm install stable`
+ 1. `source ~/.bashrc`
+1. update & install npm packages
+  1. `cd ~/node-omxplayer-sync`
+  1. `npm install`
+1. configure the ip address of one of the raspberry pis to act as the main broadcaster with a [Static IP](https://pihw.wordpress.com/guides/direct-network-connection/in-a-nut-shell-direct-network-connection/) of `192.168.0.99`, or dive into the omx-sync.js file and adjust the socket.io IP assignment manually to whatever you like.
+1. `node omx-sync.js path/to/video.mp4` on each pi to run the sync video!
 
 --------------------------------------------------------------------------------
 
