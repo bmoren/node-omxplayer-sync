@@ -3,7 +3,7 @@
 # you will need to npm install on each machine after rsyncing
 
 #add as many pi's as you want to the arrray of pi's here:
-ssh_alias=( "pi@192.168.0.99" "pi@192.168.0.24" "pi@192.168.0.33" )
+ssh_alias=( "pi@raspberrypi-1.local" "pi@raspberrypi-2.local" "pi@raspberrypi-3.local" "pi@raspberrypi-4.local" "pi@raspberrypi-5.local" )
 
 site_folder="./*"
 remote_folder="~/node-omxplayer-sync"

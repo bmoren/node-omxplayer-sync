@@ -22,7 +22,15 @@ if(file == undefined){
 console.log('current video path: ' + file);
 
 //start omx player
-var omx = exec('omxplayer '+options+' "'+file+'"');
+// var omx = exec('omxplayer '+options+' "'+file+'"');
+var omx = exec('omxplayer '+options+' "'+file+'"', (error, stdout, stderr) => {
+  if (error) {
+    console.error(`exec error: ${error}`);
+    return;
+  }
+  console.log(`stdout: ${stdout}`);
+  console.log(`stderr: ${stderr}`);
+});
 
 //SOCKET.IO HANDLING
 io.on('connection', function(socket){
@@ -39,11 +47,12 @@ socket.on('loopFlag', function(loopFlag){
 })
 
 //DBUS HANDLING
+setTimeout(function(){ //wait for dbus to become available.
+  
   bus = dbus.sessionBus({
           busAddress: fs.readFileSync('/tmp/omxplayerdbus.pi', 'ascii').trim()
   });
 
-setTimeout(function(){ //wait for dbus to become available.
   bus.invoke({
           path: "/org/mpris/MediaPlayer2",
           interface: "org.freedesktop.DBus.Properties",

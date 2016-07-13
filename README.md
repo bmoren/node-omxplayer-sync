@@ -23,7 +23,7 @@ Currently the installer script does not work, if you want to make one, please ma
 1. update & install npm packages
   1. `cd ~/node-omxplayer-sync`
   1. `npm install`
-1. configure the ip address of one of the raspberry pis to act as the main broadcaster with a [Static IP](https://pihw.wordpress.com/guides/direct-network-connection/in-a-nut-shell-direct-network-connection/) of `192.168.0.99`, or dive into the omx-sync.js file and adjust the socket.io IP assignment manually to whatever you like.
+1. configure the ip address of one of the raspberry pis to act as the main broadcaster with a [Static IP](https://www.modmypi.com/blog/how-to-give-your-raspberry-pi-a-static-ip-address-update) of `192.168.0.99`, or dive into the omx-sync.js file and adjust the socket.io IP assignment manually to whatever you like.
 1. `node omx-sync.js path/to/video.mp4` on each pi to run the sync video!
 
 #### Notes:  
