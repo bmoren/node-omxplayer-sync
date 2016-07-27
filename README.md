@@ -26,14 +26,17 @@ Currently the installer script does not work, if you want to make one, please ma
 1. configure the ip address of one of the raspberry pis to act as the main broadcaster with a [Static IP](https://www.modmypi.com/blog/how-to-give-your-raspberry-pi-a-static-ip-address-update) of `192.168.0.99`, or dive into the omx-sync.js file and adjust the socket.io IP assignment manually to whatever you like.
 1. `node omx-sync.js path/to/video.mp4` on each pi to run the sync video!
 
-#### Notes:  
-You might encounter the error `no such file or directory, open '/tmp/omxplayerdbus.pi'` on the first attempt on running the script, just try again.
-
 --------------------------------------------------------------------------------
 
 ### auto-run on startup
 
-coming soon!
+1. run sudo `raspi-config` navigate to the boot options and choose `command line (auto login as user pi)`
+1. `nano ~/.bashrc`
+1. find the line to load NVM `export NVM_DIR="/home/pi/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm` or something similar
+1. add `node ~/node-omxplayer-sync/omx-sync.js ~/absolute/path/to/video.mp4` below the NVM listeners
+1. `ctrl+x` then `Y` then `Enter` to save
+1. `sudo reboot`
 
 ### Tested on
 
