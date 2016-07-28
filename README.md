@@ -13,7 +13,7 @@ Currently the installer script does not work, if you want to make one, please ma
   1. `sudo apt-get update`
   1. `sudo apt-get upgrade`
 1. `git clone` this repository to `~/` on your raspberry pi
-1. if you are running raspbian jessie, install omxplayer & rsync
+1. if you are running raspbian jessie lite, install omxplayer & rsync
   1. `sudo apt-get install omxplayer`
   1. ` sudo apt-get install rsync`
 1. install nvm & node.js latest
@@ -24,13 +24,14 @@ Currently the installer script does not work, if you want to make one, please ma
   1. `cd ~/node-omxplayer-sync`
   1. `npm install`
 1. configure the ip address of one of the raspberry pis to act as the main broadcaster with a [Static IP](https://www.modmypi.com/blog/how-to-give-your-raspberry-pi-a-static-ip-address-update) of `192.168.0.99`, or dive into the omx-sync.js file and adjust the socket.io IP assignment manually to whatever you like.
+1. connect all pis to the same local network via wifi or ethernet
 1. `node omx-sync.js path/to/video.mp4` on each pi to run the sync video!
 
 --------------------------------------------------------------------------------
 
 ### auto-run on startup
 
-1. run sudo `raspi-config` navigate to the boot options and choose `command line (auto login as user pi)`
+1. run `sudo raspi-config`, navigate to the boot options and choose `command line (auto login as user pi)`
 1. `nano ~/.bashrc`
 1. find the line to load NVM `export NVM_DIR="/home/pi/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm` or something similar
