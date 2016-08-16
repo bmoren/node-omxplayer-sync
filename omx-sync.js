@@ -1,7 +1,8 @@
 var fs = require('fs');
 var server = require('http').createServer();
 var socket = require('socket.io-client')('http://192.168.0.99:3000');
-var io = require('socket.io')(server);
+// var io = require('socket.io')(server);
+var io = require('socket.io')(server, {'pingInterval': 10000, 'pingTimeout': 15000});
 var dbus = require('dbus-native');
 var exec = require('child_process').exec;
 var file = process.argv.slice(2)[0]; //get a path to the video argument
@@ -19,11 +20,31 @@ if(file == undefined){
   console.log("no video file specified");
   return
 }
+
+//kill previous players if the script needs to restart
+var killall = exec('killall omxplayer', (error, stdout, stderr) => {
+  if (error) {
+    console.error(`exec error: ${error}`);
+    return;
+  }
+  console.log(`stdout: ${stdout}`);
+  console.log(`stderr: ${stderr}`);
+});
+
+var killall2 = exec('killall omxplayer.bin', (error, stdout, stderr) => {
+  if (error) {
+    console.error(`exec error: ${error}`);
+    return;
+  }
+  console.log(`stdout: ${stdout}`);
+  console.log(`stderr: ${stderr}`);
+});
+
 console.log('current video path: ' + file);
 
 //start omx player
 // var omx = exec('omxplayer '+options+' "'+file+'"');
-var omx = exec('omxplayer '+options+' "'+file+'"', (error, stdout, stderr) => {
+var omx = exec('omxplayer '+options+'  '+file+'  ', (error, stdout, stderr) => {
   if (error) {
     console.error(`exec error: ${error}`);
     return;
@@ -35,6 +56,11 @@ var omx = exec('omxplayer '+options+' "'+file+'"', (error, stdout, stderr) => {
 //SOCKET.IO HANDLING
 io.on('connection', function(socket){
   console.log("Listener connected: " + socket.id);
+
+  socket.on('disconnect', function(){
+    console.log("Listener disconnected: " + socket.id );
+  });
+
 });
 
 socket.on('connect', function(){
@@ -43,12 +69,12 @@ socket.on('connect', function(){
 
 socket.on('loopFlag', function(loopFlag){
   console.log("loop flag recieved, go to 0");
-  seek(0);
+  seek(100);
 })
 
 //DBUS HANDLING
 setTimeout(function(){ //wait for dbus to become available.
-  
+
   bus = dbus.sessionBus({
           busAddress: fs.readFileSync('/tmp/omxplayerdbus.pi', 'ascii').trim()
   });
