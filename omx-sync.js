@@ -6,32 +6,22 @@ var io = require('socket.io')(server, {'pingInterval': 10000, 'pingTimeout': 150
 var dbus = require('dbus-native');
 var exec = require('child_process').exec;
 var file = process.argv.slice(2)[0]; //get a path to the video argument
-var options = process.argv.slice(2)[1];
+var options = '-o hdmi -b --loop --no-osd '
 var currentPosition, totalDuration;
 var bus; //main DBUS
+var gate = true;
+var omx;
 
 server.listen(3000, function() { console.log( 'Listening on port 3000') });
 
 // PARSE TERMINAL INPUT.
-if(options == undefined){
-  options = '-o hdmi -b --loop --no-osd '; // --no-osd --loop
-}
 if(file == undefined){
   console.log("no video file specified");
   return
 }
 
-//kill previous players if the script needs to restart
-var killall = exec('killall omxplayer', (error, stdout, stderr) => {
-  if (error) {
-    console.error(`exec error: ${error}`);
-    return;
-  }
-  console.log(`stdout: ${stdout}`);
-  console.log(`stderr: ${stderr}`);
-});
-
-var killall2 = exec('killall omxplayer.bin', (error, stdout, stderr) => {
+//kill previous player if the script needs to restart
+var killall = exec('killall omxplayer.bin', (error, stdout, stderr) => {
   if (error) {
     console.error(`exec error: ${error}`);
     return;
@@ -43,33 +33,49 @@ var killall2 = exec('killall omxplayer.bin', (error, stdout, stderr) => {
 console.log('current video path: ' + file);
 
 //start omx player
-// var omx = exec('omxplayer '+options+' "'+file+'"');
-var omx = exec('omxplayer '+options+'  '+file+'  ', (error, stdout, stderr) => {
+omx = exec('omxplayer '+options+file, (error, stdout, stderr) => {
   if (error) {
-    console.error(`exec error: ${error}`);
+    console.error(`omxplayer exec error: ${error}`);
     return;
   }
-  console.log(`stdout: ${stdout}`);
-  console.log(`stderr: ${stderr}`);
+  console.log(`exec omxplayer stdout: ${stdout}`);
+  console.log(`exec omxplayer stderr: ${stderr}`);
+});
+
+omx.on('exit', function(code){
+  console.log('EXIT CODE: '+ code +' @ ' + Date() );
+  // relaunch omxplayer
+  process.exit(0);
+
 });
 
 //SOCKET.IO HANDLING
 io.on('connection', function(socket){
-  console.log("Listener connected: " + socket.id);
+  console.log("Listener connected: " + socket.id + ' @ ' + Date());
 
   socket.on('disconnect', function(){
     console.log("Listener disconnected: " + socket.id );
   });
 
+    // io.to(socket.id).emit('currentPos',  currentPosition );
 });
 
 socket.on('connect', function(){
-  console.log("Connected to the broadcaster as: " + socket.id);
+  console.log("Connected to the broadcaster as: " + socket.id + ' @ ' + Date() );
+
 });
 
+// socket.on('currentPos',function(currentPosition){
+//   seek(currentPosition)
+//   console.log("got Current Position from boradcaster" + currentPosition);
+// });
+
 socket.on('loopFlag', function(loopFlag){
-  console.log("loop flag recieved, go to 0");
-  seek(100);
+  console.log('loop flag recieved  @ ' + Date());
+  seek( s2micro(1) );
+  setTimeout(function(){
+    gate = true;
+  },1000)
 })
 
 //DBUS HANDLING
@@ -89,7 +95,6 @@ setTimeout(function(){ //wait for dbus to become available.
           console.log("Duration: " + totalDuration);
   });
 
-
   //send out loop flag
   setInterval(function(){
     bus.invoke({
@@ -102,15 +107,16 @@ setTimeout(function(){ //wait for dbus to become available.
             // console.log("CP: " + currentPosition);
     });
 
-    if(currentPosition >= totalDuration - 250000 && currentPosition < totalDuration){ //are we in the end range of the file?
-      console.log("*File Ended");
-      io.emit('loopFlag', { loopFlag : 'loop' });
+
+    if(currentPosition >= totalDuration - s2micro(1) && gate == true){ //are we in the end range of the file?
+      gate = false;
+      console.log( "*File Ended @ " + Date() );
+      io.emit('loopFlag', { loopFlag : 'loop' }); //add one of these above outside the interval loop to reset when the server boots?
     }
 
-  },100);
+  },250);
 
 }, 1000);
-
 
 function seek(pos){
   bus.invoke({
@@ -126,6 +132,10 @@ function seek(pos){
         }
   });
 
+}
+
+function s2micro(seconds){
+  return seconds * 1000000;
 }
 
 
