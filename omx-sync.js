@@ -57,18 +57,12 @@ io.on('connection', function(socket){
     console.log("Listener disconnected: " + socket.id );
   });
 
-    // io.to(socket.id).emit('currentPos',  currentPosition );
 });
 
 socket.on('connect', function(){
   console.log("Connected to the broadcaster as: " + socket.id + ' @ ' + Date() );
 
 });
-
-// socket.on('currentPos',function(currentPosition){
-//   seek(currentPosition)
-//   console.log("got Current Position from boradcaster" + currentPosition);
-// });
 
 socket.on('loopFlag', function(loopFlag){
   console.log('loop flag recieved  @ ' + Date());
@@ -85,37 +79,39 @@ setTimeout(function(){ //wait for dbus to become available.
           busAddress: fs.readFileSync('/tmp/omxplayerdbus.pi', 'ascii').trim()
   });
 
-  bus.invoke({
-          path: "/org/mpris/MediaPlayer2",
-          interface: "org.freedesktop.DBus.Properties",
-          member: "Duration",
-          destination: "org.mpris.MediaPlayer2.omxplayer",
-  }, function(err, duration) {
-          totalDuration = duration; //set to a global
-          console.log("Duration: " + totalDuration);
-  });
-
-  //send out loop flag
-  setInterval(function(){
+  setTimeout(function(){
     bus.invoke({
             path: "/org/mpris/MediaPlayer2",
             interface: "org.freedesktop.DBus.Properties",
-            member: "Position",
+            member: "Duration",
             destination: "org.mpris.MediaPlayer2.omxplayer",
-    }, function(err, position) {
-            currentPosition = position; //set to a global
-            // console.log("CP: " + currentPosition);
+    }, function(err, duration) {
+            totalDuration = duration; //set to a global
+            console.log("Duration: " + totalDuration);
     });
 
+    //send out loop flag
+    setInterval(function(){
+      bus.invoke({
+              path: "/org/mpris/MediaPlayer2",
+              interface: "org.freedesktop.DBus.Properties",
+              member: "Position",
+              destination: "org.mpris.MediaPlayer2.omxplayer",
+      }, function(err, position) {
+              currentPosition = position; //set to a global
+              // console.log("CP: " + currentPosition);
+      });
 
-    if(currentPosition >= totalDuration - s2micro(1) && gate == true){ //are we in the end range of the file?
-      gate = false;
-      console.log( "*File Ended @ " + Date() );
-      io.emit('loopFlag', { loopFlag : 'loop' }); //add one of these above outside the interval loop to reset when the server boots?
-    }
 
-  },250);
+      if(currentPosition >= totalDuration - s2micro(1) && gate == true){ //are we in the end range of the file?
+        gate = false;
+        console.log( "*File Ended @ " + Date() );
+        io.emit('loopFlag', { loopFlag : 'loop' }); //add one of these above outside the interval loop to reset when the server boots?
+      }
 
+    },250);
+
+  }, 1000)
 }, 1000);
 
 function seek(pos){
