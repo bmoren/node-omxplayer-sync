@@ -9,11 +9,14 @@
 ########
 
 #install nvm & node.js latest
-wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash 
+wget https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh 
+chmod +x ~/install.sh
+./install.sh
+rm ~/install.sh
 source ~/.bashrc 
 nvm install stable 
 
-sudo apt-get install git 
+sudo --yes --force-yes apt-get install git 
 git clone https://github.com/bmoren/node-omxplayer-sync.git 
 
 cd ~/node-omxplayer-sync 
