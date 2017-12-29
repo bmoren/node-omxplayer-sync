@@ -19,21 +19,21 @@ export NVM_DIR="$HOME/.nvm"
 
 nvm install stable 
 
-sudo apt-get -yes install git 
+sudo apt-get --yes install git 
 git clone https://github.com/bmoren/node-omxplayer-sync.git 
 
 cd ~/node-omxplayer-sync 
 npm install 
 
 #install omxplayer
-sudo apt-get -yes install omxplayer 
+sudo apt-get --yes install omxplayer 
 
 #install usb-mount so we can easily get files into the system.
-sudo apt-get -yes install usbmount 
+sudo apt-get --yes install usbmount 
 
 #get your pi up to date!
-sudo apt-get -yes update 
-sudo apt-get -yes upgrade
+sudo apt-get --yes update 
+sudo apt-get --yes upgrade
 
 #dont forget to expand your filesystem using:
 #sudo raspi-config
