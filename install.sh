@@ -10,23 +10,24 @@
 
 #install nvm & node.js latest
 wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash &
-source ~/.bashrc &
-nvm install stable &
+wait $!
+source ~/.bashrc 
+nvm install stable 
 
-sudo apt-get install git &
-git clone https://github.com/bmoren/node-omxplayer-sync.git &
+sudo apt-get install git 
+git clone https://github.com/bmoren/node-omxplayer-sync.git 
 
-cd ~/node-omxplayer-sync &
-npm install &
+cd ~/node-omxplayer-sync 
+npm install 
 
 #install omxplayer
-sudo apt-get install omxplayer &
+sudo apt-get install omxplayer 
 
 #install usb-mount so we can easily get files into the system.
-sudo apt-get install usbmount &
+sudo apt-get install usbmount 
 
 #get your pi up to date!
-sudo apt-get update &
+sudo apt-get update 
 sudo apt-get upgrade
 
 #dont forget to expand your filesystem using:
