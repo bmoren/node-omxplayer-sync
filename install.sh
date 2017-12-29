@@ -1,5 +1,4 @@
-#!/bin/bash
-
+#!/usr/bin/env bash
 #install rsync on the client for the deploy script, uncomment if you are going to do some development, not needed for a standard deployment.
 #sudo --yes --force-yes apt-get install rsync
 
@@ -13,7 +12,7 @@ wget https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh
 chmod +x ~/install.sh
 ./install.sh
 rm ~/install.sh
-source ~/.bashrc 
+exec bash
 nvm install stable 
 
 sudo apt-get -yes install git 
