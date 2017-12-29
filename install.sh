@@ -7,7 +7,7 @@
 
 ########
 
-#install nvm & node.js latest
+#install nvm & node.js stable
 wget https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh 
 chmod +x ~/install.sh
 ./install.sh
@@ -19,11 +19,17 @@ export NVM_DIR="$HOME/.nvm"
 
 nvm install stable 
 
+#install git and clone this repo
 sudo apt-get --yes install git 
 git clone https://github.com/bmoren/node-omxplayer-sync.git 
 
+#install node dependencies
 cd ~/node-omxplayer-sync 
 npm install 
+
+#install forever and append startup command to bashrc ... dont forget to change the filename to your video file
+npm install forever -g
+echo 'forever start ~/node-omxplayer-sync/omx-sync.js ~/node-omxplayer-sync/test.mp4' >> ~/.bashrc 
 
 #install omxplayer
 sudo apt-get --yes install omxplayer 
@@ -31,9 +37,6 @@ sudo apt-get --yes install omxplayer
 #install usb-mount so we can easily get files into the system.
 sudo apt-get --yes install usbmount 
 
-#get your pi up to date!
+#get pi up to date!
 sudo apt-get --yes update 
 sudo apt-get --yes upgrade
-
-#dont forget to expand your filesystem using:
-#sudo raspi-config
