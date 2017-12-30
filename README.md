@@ -16,9 +16,9 @@ node-omxplayer-sync utilizes a socket.io connection between and broadcaster and 
 1. to change the video file which plays on boot, alter the video file path in your `~/.bashrc` or change the filepath in the installer script before running it!
 
 ### How to get files onto each pi system
-1. install usbmount to mount flashdrives: `sudo apt-get install usbmount`
+1. if you didnt use the installer script, install usbmount to mount flashdrives: `sudo apt-get install usbmount`
 2. copy the file from a flashdrive: `cp /media/usb/yourfile.mp4 ~/node-omxplayer-sync/`
-3. `node omx-sync.js path/to/NEWvideo.mp4`
+3. `node omx-sync.js path/to/video.mp4`
 
 ### auto-run on startup (the installer script does this automatically!)
 1. run `sudo raspi-config`, navigate to the boot options and choose `command line (auto login as user pi)`
