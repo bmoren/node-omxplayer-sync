@@ -11,8 +11,10 @@ node-omxplayer-sync utilizes a socket.io connection between and broadcaster and 
 
 ### Installer Script
 1. ssh into your pi
-2. run `wget -qO- https://raw.githubusercontent.com/bmoren/node-omxplayer-sync/master/install.sh | bash`
-3. dont forget to `sudo raspi-config` and change the boot options to `command line (auto login as user pi)`
+1. run `wget -qO- https://raw.githubusercontent.com/bmoren/node-omxplayer-sync/master/install.sh | bash`
+1. dont forget to `sudo raspi-config` and change the boot options to `command line (auto login as user pi)`
+1. see the section below on getting files onto the pi
+1. to change the video file which plays on boot, alter the video file path in your `~/.bashrc` or change the filepath before running the installer script
 
 ### Manual Install:
 1. Setup your Pi
