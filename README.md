@@ -5,11 +5,11 @@
 node-omxplayer-sync utilizes a socket.io connection between and broadcaster and many listener raspberry pis provided to synchronized playback. The broadcaster sends out a notification to all listeners when its video has looped. This resets all listeners (including itself) to the start of the loop playback. All listeners synchronize on one full playback loop of the main broadcaster and will continually attempt to re-sync each time the main broadcaster's file loops.
 
 ### Important Details
-1. configure the ip address of one of the raspberry pis to act as the main broadcaster with a [Static IP](https://www.modmypi.com/blog/how-to-give-your-raspberry-pi-a-static-ip-address-update) of `192.168.0.99`, or dive into the omx-sync.js file and adjust the socket.io IP assignment manually to whatever you like.
-1. connect all pis to the same local network via wifi or ethernet
++ configure the ip address of one of the raspberry pis to act as the main broadcaster with a [Static IP](https://www.modmypi.com/blog/how-to-give-your-raspberry-pi-a-static-ip-address-update) of `192.168.0.99`, or dive into the omx-sync.js file and adjust the socket.io IP assignment manually to whatever you like.
++ connect all pis to the same local network via wifi or ethernet
   + make sure that your router's LAN ip address is `192.168.0.1`
 
-### Installer Script:
+### Installer Script
 1. ssh into your pi
 2. run `wget -qO- https://raw.githubusercontent.com/bmoren/node-omxplayer-sync/master/install.sh | bash`
 3. dont forget to `sudo raspi-config` and change the boot options to `command line (auto login as user pi)` under advanced
@@ -46,9 +46,8 @@ node-omxplayer-sync utilizes a socket.io connection between and broadcaster and 
 3. `node omx-sync.js path/to/NEWvideo.mp4`
 
 ### Tested on
-
-Node v9.3.0
-omxplayer Version: 5a25a57 [debian] Repository: git@github.com:XECDesign/omxplayer.git
-RASPBIAN STRETCH LITE | 2017-11-29
-dbus-native@0.2.3
-socket.io@1.7.4
++ Node v9.3.0
++ omxplayer Version: 5a25a57 [debian] Repository: git@github.com:XECDesign/omxplayer.git
++ RASPBIAN STRETCH LITE | 2017-11-29
++ dbus-native@0.2.3
++ socket.io@1.7.4
