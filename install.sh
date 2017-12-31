@@ -7,6 +7,11 @@
 
 ########
 
+#get pi up to date!
+echo "<<<<<<<<<<<< UPDATING PI >>>>>>>>>>>>"
+sudo apt-get --yes update 
+sudo apt-get --yes upgrade
+
 #install nvm & node.js stable
 echo "<<<<<<<<<<<< INSTALLING NVM NODE AND NPM >>>>>>>>>>>>"
 wget https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh 
@@ -43,10 +48,6 @@ sudo apt-get --yes install omxplayer
 echo "<<<<<<<<<<<< INSTALLING USBMOUNT >>>>>>>>>>>>"
 sudo apt-get --yes install usbmount 
 
-#get pi up to date!
-echo "<<<<<<<<<<<< UPDATING PI >>>>>>>>>>>>"
-sudo apt-get --yes update 
-sudo apt-get --yes upgrade
 
 echo "<<<<<<<<<<<< COMPLETE >>>>>>>>>>>>"
 
