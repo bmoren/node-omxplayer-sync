@@ -1,3 +1,9 @@
+// node-omxplayer-sync
+// Ben Moren
+// https://github.com/bmoren/node-omxplayer-sync/
+// http://benmoren.com
+// GNU General Public License v3.0
+
 var fs = require('fs');
 var server = require('http').createServer();
 var socket = require('socket.io-client')('http://192.168.0.99:3000');
