@@ -1,3 +1,9 @@
+# node-omxplayer-sync
+# Ben Moren
+# https://github.com/bmoren/node-omxplayer-sync/
+# http://benmoren.com
+# GNU General Public License v3.0
+
 #!/usr/bin/env bash
 #install rsync on the client for the deploy script, uncomment if you are going to do some development, not needed for a standard deployment.
 #sudo --yes --force-yes apt-get install rsync
